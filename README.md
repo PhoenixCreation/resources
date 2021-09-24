@@ -1,3 +1,7 @@
+# TryHackMe KOTH Writeup.
+
+#
+
 # Panda
 
 ssh shifu@$IP
