@@ -8,7 +8,7 @@ import urllib.parse  # for url encoding of special characters
 
 # CHANGE THIS VALUES AS PER YOUR NEEDS
 IP = '10.10.237.121'  # IP of the server
-USERNAME = 'john'  # username of the user????
+USERNAME = 'admin'  # username of the user????
 
 # YOU DON"T HAVE TO CHANGE ANYTHING BELOW THIS LINE
 PASSWORD_LENGTH = 15  # this is temporary, it will change automatically
